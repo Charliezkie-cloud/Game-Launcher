@@ -1,0 +1,221 @@
+﻿<Window x:Class="Game_Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Game_Launcher"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        WindowStartupLocation="CenterScreen"
+        Title="Charlzk Game Launcher" Height="750" MinHeight="450" Width="1200" MinWidth="850">
+    <Window.Resources>
+        <!-- Sidebar Button Style -->
+        <Style x:Key="SidebarButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#505050"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,15"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="#E8E8E8"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="#D8D8D8"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Active Sidebar Button Style -->
+        <Style x:Key="SidebarButtonActive" TargetType="{x:Type Button}" BasedOn="{StaticResource SidebarButton}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <SolidColorBrush Color="#0078D4"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="#0984e3"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="#0e75c4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Toggle Button Style -->
+        <Style x:Key="ToggleMenuButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                BorderThickness="0">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.15" Color="Black"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Simple Blurred Background -->
+        <Image Source="/Assets/background-4.png" 
+               Stretch="Fill"/>
+
+        <!-- Main Content Area -->
+        <Grid x:Name="MainGrid" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="SidebarColumn" Width="210"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <Border x:Name="Sidebar"
+                    Grid.Column="0"
+                    Background="White"
+                    CornerRadius="8"
+                    Margin="0,0,10,0"
+                    Width="200"
+                    ClipToBounds="True">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.15" Color="Black"/>
+                </Border.Effect>
+
+                <StackPanel Margin="0,20,0,20">
+                    <TextBlock Text="CATEGORIES" 
+                               FontSize="11" 
+                               FontWeight="SemiBold" 
+                               Foreground="#909090"
+                               Margin="20,0,20,15"/>
+
+                    <Button x:Name="AppsButton"
+                            Content="Apps"
+                            Style="{StaticResource SidebarButtonActive}"
+                            Click="CategoryButton_Click"
+                            Tag="Apps"/>
+
+                    <Button x:Name="OfflineGamesButton"
+                            Content="Offline Games"
+                            Style="{StaticResource SidebarButton}"
+                            Click="CategoryButton_Click"
+                            Tag="OfflineGames"/>
+
+                    <Button x:Name="OnlineGamesButton"
+                            Content="Online Games"
+                            Style="{StaticResource SidebarButton}"
+                            Click="CategoryButton_Click"
+                            Tag="OnlineGames"/>
+
+                    <Button x:Name="OthersButton"
+                            Content="Others"
+                            Style="{StaticResource SidebarButton}"
+                            Click="CategoryButton_Click"
+                            Tag="Others"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Content Area with ScrollViewer -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header with Toggle Button -->
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,15">
+                    <Button x:Name="ToggleMenuButton"
+                            Style="{StaticResource ToggleMenuButton}"
+                            Click="ToggleMenu_Click"
+                            Margin="0,0,15,0">
+                        <TextBlock Text="☰" FontSize="20" FontWeight="Bold" Foreground="#505050"/>
+                    </Button>
+                    <TextBlock x:Name="CategoryTitle" 
+                               Text="Apps" 
+                               FontSize="24" 
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center"
+                               Foreground="#202020"/>
+                </StackPanel>
+
+                <!-- Scrollable Content Area -->
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!-- All WrapPanels in same position, controlled by Visibility -->
+                        <WrapPanel x:Name="AppsPanel" Visibility="Visible" Grid.Row="0"/>
+                        <WrapPanel x:Name="OfflineGamesPanel" Visibility="Collapsed" Grid.Row="0"/>
+                        <WrapPanel x:Name="OnlineGamesPanel" Visibility="Collapsed" Grid.Row="0"/>
+                        <WrapPanel x:Name="OthersPanel" Visibility="Collapsed" Grid.Row="0"/>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Style="{StaticResource ModernButtonSecondary}" Margin="10">
+                                Settings
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
