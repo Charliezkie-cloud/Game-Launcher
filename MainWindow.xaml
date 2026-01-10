@@ -12,7 +12,7 @@
         <!-- Sidebar Button Style -->
         <Style x:Key="SidebarButton" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#505050"/>
+            <Setter Property="Foreground" Value="{DynamicResource SecondaryText}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Padding" Value="20,15"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -31,18 +31,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background">
-                                    <Setter.Value>
-                                        <SolidColorBrush Color="#E8E8E8"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource HoverBackground}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background">
-                                    <Setter.Value>
-                                        <SolidColorBrush Color="#D8D8D8"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource PressedBackground}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -52,11 +44,7 @@
 
         <!-- Active Sidebar Button Style -->
         <Style x:Key="SidebarButtonActive" TargetType="{x:Type Button}" BasedOn="{StaticResource SidebarButton}">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <SolidColorBrush Color="#0078D4"/>
-                </Setter.Value>
-            </Setter>
+            <Setter Property="Background" Value="{DynamicResource AccentColor}"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -70,18 +58,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background">
-                                    <Setter.Value>
-                                        <SolidColorBrush Color="#0984e3"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentHover}"/>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background">
-                                    <Setter.Value>
-                                        <SolidColorBrush Color="#0e75c4"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentHover}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -91,7 +71,7 @@
 
         <!-- Toggle Button Style -->
         <Style x:Key="ToggleMenuButton" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="White"/>
+            <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="40"/>
@@ -103,7 +83,7 @@
                                 CornerRadius="8"
                                 BorderThickness="0">
                             <Border.Effect>
-                                <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.15" Color="Black"/>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.15" Color="{Binding Source={StaticResource ShadowColor}, Path=Color}"/>
                             </Border.Effect>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -128,20 +108,20 @@
             <!-- Sidebar -->
             <Border x:Name="Sidebar"
                     Grid.Column="0"
-                    Background="White"
+                    Background="{DynamicResource PrimaryBackground}"
                     CornerRadius="8"
                     Margin="0,0,10,0"
                     Width="200"
                     ClipToBounds="True">
                 <Border.Effect>
-                    <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.15" Color="Black"/>
+                    <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.15" Color="{Binding Source={StaticResource ShadowColor}, Path=Color}"/>
                 </Border.Effect>
 
                 <StackPanel Margin="0,20,0,20">
                     <TextBlock Text="CATEGORIES" 
                                FontSize="11" 
                                FontWeight="SemiBold" 
-                               Foreground="#909090"
+                               Foreground="{DynamicResource TertiaryText}"
                                Margin="20,0,20,15"/>
 
                     <Button x:Name="AppsButton"
@@ -183,14 +163,14 @@
                             Style="{StaticResource ToggleMenuButton}"
                             Click="ToggleMenu_Click"
                             Margin="0,0,15,0">
-                        <TextBlock Text="☰" FontSize="20" FontWeight="Bold" Foreground="#505050"/>
+                        <TextBlock Text="☰" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource SecondaryText}"/>
                     </Button>
                     <TextBlock x:Name="CategoryTitle" 
                                Text="Apps" 
                                FontSize="24" 
                                FontWeight="SemiBold"
                                VerticalAlignment="Center"
-                               Foreground="#202020"/>
+                               Foreground="{DynamicResource PrimaryText}"/>
                 </StackPanel>
 
                 <!-- Scrollable Content Area -->
@@ -209,7 +189,7 @@
                         <WrapPanel x:Name="OthersPanel" Visibility="Collapsed" Grid.Row="0"/>
 
                         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
-                            <Button Style="{StaticResource ModernButtonSecondary}" Margin="10">
+                            <Button Click="SettingsButton_Click" Style="{StaticResource ModernButtonSecondary}" Margin="10">
                                 Settings
                             </Button>
                         </StackPanel>

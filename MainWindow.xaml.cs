@@ -2,10 +2,10 @@
 using Game_Launcher.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace Game_Launcher
@@ -15,8 +15,9 @@ namespace Game_Launcher
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool isSidebarOpen = true;
-        private Button currentActiveButton;
+        private bool _isSidebarOpen = true;
+        private Button _currentActiveButton;
+        private Settings _appSettings = SettingsHelper._defaultSettings;
 
         public MainWindow()
         {
@@ -37,8 +38,32 @@ namespace Game_Launcher
         {
             base.OnContentRendered(e);
 
-            currentActiveButton = AppsButton;
-            currentActiveButton.Style = (Style)FindResource("SidebarButtonActive");
+            _appSettings = SettingsHelper.GetSettings();
+            ApplyTheme(_appSettings.DarkMode);
+
+            _currentActiveButton = AppsButton;
+            _currentActiveButton.Style = (Style)FindResource("SidebarButtonActive");
+
+            DisplayAppItems(AppsPanel, _apps);
+            DisplayAppItems(OfflineGamesPanel, _offlineGames);
+            DisplayAppItems(OnlineGamesPanel, _onlineGames);
+            DisplayAppItems(OthersPanel, _otherApps);
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+        }
+        
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ReadDirs();
+        }
+
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow settingsWindow = new SettingsWindow();
+            settingsWindow.ShowDialog();
         }
 
         private void ReadDirs()
@@ -53,26 +78,33 @@ namespace Game_Launcher
         {
             foreach (AppItem appItem in appItems)
             {
-                Button button = new Button()
+                Button button = new Button();
+                System.Windows.Controls.Image image = new System.Windows.Controls.Image()
+                { Source = IconExtractor.ConvertBitmapToBitmapSource(appItem.Icon.ToBitmap()) };
+                TextBlock textBlock = new TextBlock() { Text = appItem.Name };
+
+                switch (_appSettings.IconSize)
                 {
-                    Style = (Style)FindResource("Win11IconButton")
-                };
+                    case 1:
+                        button.Style = (Style)FindResource("Win11IconButtonSmall");
+                        image.Style = (Style)FindResource("IconImageSmall");
+                        textBlock.Style = (Style)FindResource("IconTextSmall");
+                        break;
+                    case 2:
+                        button.Style = (Style)FindResource("Win11IconButtonMedium");
+                        image.Style = (Style)FindResource("IconImageMedium");
+                        textBlock.Style = (Style)FindResource("IconTextMedium");
+                        break;
+                    case 3:
+                        button.Style = (Style)FindResource("Win11IconButtonLarge");
+                        image.Style = (Style)FindResource("IconImageLarge");
+                        textBlock.Style = (Style)FindResource("IconTextLarge");
+                        break;
+                }
 
                 StackPanel stackPanel = new StackPanel()
                 {
                     Style = (Style)FindResource("IconContent")
-                };
-
-                System.Windows.Controls.Image image = new System.Windows.Controls.Image()
-                {
-                    Style = (Style)FindResource("IconImage"),
-                    Source = IconExtractor.ConvertBitmapToBitmapSource(appItem.Icon.ToBitmap())
-                };
-
-                TextBlock textBlock = new TextBlock()
-                {
-                    Style = (Style)FindResource("IconText"),
-                    Text = appItem.Name
                 };
 
                 stackPanel.Children.Add(image);
@@ -98,15 +130,6 @@ namespace Game_Launcher
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            ReadDirs();
-            DisplayAppItems(AppsPanel, _apps);
-            DisplayAppItems(OfflineGamesPanel, _offlineGames);
-            DisplayAppItems(OnlineGamesPanel, _onlineGames);
-            DisplayAppItems(OthersPanel, _otherApps);
-        }
-
         private void CategoryButton_Click(object sender, RoutedEventArgs e)
         {
             Button clickedButton = sender as Button;
@@ -120,12 +143,10 @@ namespace Game_Launcher
 
         private void UpdateActiveButton(Button newActiveButton)
         {
-            if (currentActiveButton != null)
-            {
-                currentActiveButton.Style = (Style)FindResource("SidebarButton");
-            }
-            currentActiveButton = newActiveButton;
-            currentActiveButton.Style = (Style)FindResource("SidebarButtonActive");
+            if (_currentActiveButton != null)
+                _currentActiveButton.Style = (Style)FindResource("SidebarButton");
+            _currentActiveButton = newActiveButton;
+            _currentActiveButton.Style = (Style)FindResource("SidebarButtonActive");
         }
 
         private void ShowPanel(string panelName)
@@ -166,23 +187,43 @@ namespace Game_Launcher
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
             };
 
-            if (isSidebarOpen)
+            if (_isSidebarOpen)
             {
                 widthAnimation.From = new GridLength(210);
                 widthAnimation.To = new GridLength(0);
                 opacityAnimation.To = 0;
-                isSidebarOpen = false;
+                _isSidebarOpen = false;
             }
             else
             {
                 widthAnimation.From = new GridLength(0);
                 widthAnimation.To = new GridLength(210);
                 opacityAnimation.To = 1;
-                isSidebarOpen = true;
+                _isSidebarOpen = true;
             }
 
             SidebarColumn.BeginAnimation(ColumnDefinition.WidthProperty, widthAnimation);
             Sidebar.BeginAnimation(OpacityProperty, opacityAnimation);
+        }
+
+        private void ApplyTheme(bool darkMode)
+        {
+            var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
+
+            if (_appSettings.DarkMode)
+            {
+                mergedDictionaries.Clear();
+                mergedDictionaries.Add(
+                    new ResourceDictionary { Source = new Uri("Themes/Dark.xaml", UriKind.Relative) }
+                );
+            }
+            else
+            {
+                mergedDictionaries.Clear();
+                mergedDictionaries.Add(
+                    new ResourceDictionary { Source = new Uri("Themes/Light.xaml", UriKind.Relative) }
+                );
+            }
         }
     }
 }

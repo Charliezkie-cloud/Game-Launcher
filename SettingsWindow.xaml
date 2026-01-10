@@ -1,0 +1,36 @@
+﻿<Window x:Class="Game_Launcher.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Game_Launcher"
+        xmlns:vm="clr-namespace:Game_Launcher.ModelView"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        Title="SettingsWindow" Height="450" Width="450">
+    <Window.DataContext>
+        <vm:SettingsModelView/>
+    </Window.DataContext>
+    
+    <StackPanel Orientation="Vertical" Margin="10">
+        <Grid Margin="0, 0, 0, 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0, 0, 10, 0">Dark Mode</TextBlock>
+            <ComboBox ItemsSource="{Binding DarkModeOptions}" SelectedItem="{Binding DarkMode, Mode=TwoWay}" Grid.Column="1"/>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0, 0, 10, 0">Icon Size</TextBlock>
+            <ComboBox ItemsSource="{Binding IconSizeOptions}" SelectedItem="{Binding IconSize, Mode=TwoWay}" Grid.Column="1"/>
+        </Grid>
+    </StackPanel>
+</Window>
