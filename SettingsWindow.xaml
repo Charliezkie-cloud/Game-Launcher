@@ -7,23 +7,33 @@
         xmlns:vm="clr-namespace:Game_Launcher.ModelView"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Loaded="Window_Loaded"
-        Title="SettingsWindow" Height="450" Width="450">
+        Title="SettingsWindow" Height="250" Width="450">
     <Window.DataContext>
         <vm:SettingsModelView/>
     </Window.DataContext>
-    
+
     <StackPanel Orientation="Vertical" Margin="10">
         <Grid Margin="0, 0, 0, 10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
+
             <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0, 0, 10, 0">Dark Mode</TextBlock>
             <ComboBox ItemsSource="{Binding DarkModeOptions}" SelectedItem="{Binding DarkMode, Mode=TwoWay}" Grid.Column="1"/>
         </Grid>
-        <Grid>
+        
+        <Grid Margin="0, 0, 0, 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0, 0, 10, 0">Background</TextBlock>
+            <ComboBox ItemsSource="{Binding BackgroundOptions}" SelectedItem="{Binding Background, Mode=TwoWay}" Grid.Column="1"/>
+        </Grid>
+        
+        <Grid Margin="0, 0, 0, 20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
@@ -32,5 +42,40 @@
             <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="0, 0, 10, 0">Icon Size</TextBlock>
             <ComboBox ItemsSource="{Binding IconSizeOptions}" SelectedItem="{Binding IconSize, Mode=TwoWay}" Grid.Column="1"/>
         </Grid>
+
+        <TextBlock Margin="0, 0, 0, 5"  FontSize="18" FontWeight="DemiBold">
+            Developed by Charles Henry M. Tinoy Jr.
+        </TextBlock>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0">Project source:</Label>
+            <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/Charliezkie-cloud/Game-Launcher/">
+                    Charliezkie-Cloud/Game-Launcher
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Grid.Column="0">Source license:</Label>
+            <TextBlock Grid.Column="1" VerticalAlignment="Center">
+                <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/Charliezkie-cloud/Game-Launcher/blob/master/LICENSE.txt">
+                    MIT License
+                </Hyperlink>
+            </TextBlock>
+        </Grid>
+
+        <Label Margin="0, 0, 0, 5" Foreground="Gray" HorizontalAlignment="Center">
+            <TextBlock Foreground="Gray">© <Run Text="{Binding FullYear}" /> Game Launcher. All rights reserved.</TextBlock>
+        </Label>
     </StackPanel>
 </Window>

@@ -4,10 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game_Launcher"
+        xmlns:vm="clr-namespace:Game_Launcher.ModelView"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         Title="Charlzk Game Launcher" Height="750" MinHeight="450" Width="1200" MinWidth="850">
+    <Window.DataContext>
+        <vm:MainModelView/>
+    </Window.DataContext>
+    
     <Window.Resources>
         <!-- Sidebar Button Style -->
         <Style x:Key="SidebarButton" TargetType="{x:Type Button}">
@@ -94,8 +99,8 @@
     </Window.Resources>
 
     <Grid>
-        <!-- Simple Blurred Background -->
-        <Image Source="/Assets/background-4.png" 
+        <!-- Background -->
+        <Image Source="{Binding BackgroundImage}" 
                Stretch="Fill"/>
 
         <!-- Main Content Area -->
@@ -113,6 +118,7 @@
                     Margin="0,0,10,0"
                     Width="200"
                     ClipToBounds="True">
+
                 <Border.Effect>
                     <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.15" Color="{Binding Source={StaticResource ShadowColor}, Path=Color}"/>
                 </Border.Effect>

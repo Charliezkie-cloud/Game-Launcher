@@ -2,6 +2,7 @@
 using Game_Launcher.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +22,6 @@ namespace Game_Launcher
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        private Settings _appSettings = new Settings()
-        {
-            DarkMode = false,
-            IconSize = 3
-        };
-
         public SettingsWindow()
         {
             InitializeComponent();
@@ -36,12 +31,18 @@ namespace Game_Launcher
         {
             base.OnContentRendered(e);
 
-            _appSettings = SettingsHelper.GetSettings();
+            SettingsHelper.GetSettings();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Hyperlink_RequestNavigate(object sender, System.Windows.Navigation.RequestNavigateEventArgs e)
         {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = e.Uri.AbsoluteUri,
+                UseShellExecute = true
+            });
 
+            e.Handled = true;
         }
     }
 }

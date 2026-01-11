@@ -11,7 +11,8 @@ namespace Game_Launcher.Helpers
         public static readonly Settings _defaultSettings = new Settings()
         {
             DarkMode = false,
-            IconSize = 2
+            IconSize = 2,
+            Background = "/Assets/background-4.png"
         };
         private static JsonSerializer jsonSerializer = new JsonSerializer()
         {
@@ -71,6 +72,22 @@ namespace Game_Launcher.Helpers
                 appSettings = (Settings)jsonSerializer.Deserialize(streamReader, typeof(Settings));
 
             appSettings.IconSize = iconSize;
+
+            SaveSettingsToFile(appSettings);
+
+            return appSettings;
+        }
+
+        public static Settings SetBackground(string background)
+        {
+            Settings appSettings = new Settings();
+
+            CreateIfNotExists();
+
+            using (StreamReader streamReader = new StreamReader(_settingsPath))
+                appSettings = (Settings)jsonSerializer.Deserialize(streamReader, typeof(Settings));
+
+            appSettings.Background = $"/Assets/{background}.png";
 
             SaveSettingsToFile(appSettings);
 
