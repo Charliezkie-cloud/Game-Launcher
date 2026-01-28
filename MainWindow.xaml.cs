@@ -79,8 +79,9 @@ namespace Game_Launcher
             foreach (AppItem appItem in appItems)
             {
                 Button button = new Button();
-                System.Windows.Controls.Image image = new System.Windows.Controls.Image()
-                { Source = IconExtractor.ConvertBitmapToBitmapSource(appItem.Icon.ToBitmap()) };
+
+                if (appItem.Icon == null) continue;
+                Image image = new Image() { Source = IconExtractor.ConvertBitmapToBitmapSource(appItem.Icon.ToBitmap()) };
                 TextBlock textBlock = new TextBlock() { Text = appItem.Name };
 
                 switch (_appSettings.IconSize)
